@@ -14,7 +14,7 @@ const ui={
   pause(show){$('#pause').classList.toggle('hidden',!show);},
   finish(){this.dialogueOpen=false;$('#hud').classList.add('hidden');$('#touch').classList.add('hidden');$('#ending').classList.remove('hidden');$('#ending-copy').textContent='The Bone Throne shatters. The horns, darkness, and corruption fall away. Piuu stands restored — not a demon, but the Princess of Piulandia. Dawn reaches the surviving palace as she walks toward its gates. You did not defeat Piuu. You found Piuu beneath the curse.';}
 };
-function escapeHtml(s){return String(s).replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\\':'&#92;','"':'&quot;'}[c]));}
+function escapeHtml(s){return String(s).replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]||c));}
 
 const game=new Game($('#game'),ui);
 $('#new-game').onclick=()=>{clearSave();location.reload();};
