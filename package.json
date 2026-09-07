@@ -1,10 +1,10 @@
 {
   "name": "piukistan-the-truth-of-piuu",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "type": "module",
   "scripts": {
     "start": "python3 -m http.server 4173",
-    "check": "node --check src/main.js && node --check src/game/Game.js && node --check src/data/realms.js"
+    "check": "node --check src/main.js && node --check src/game/Game.js && node --check src/game/World3D.js && node --check src/data/realms.js"
   }
 }
