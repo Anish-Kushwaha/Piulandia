@@ -1,34 +1,50 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#090b12" />
-    <title>Piukistan: The Truth of Piuu</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <main id="app" aria-label="Piukistan: The Truth of Piuu">
-      <canvas id="game" aria-label="Piukistan game world"></canvas>
-      <section id="title-screen" class="screen">
-        <p class="eyebrow">A CURSED CHRONICLE</p>
-        <h1>PIU<span>K</span>ISTAN</h1>
-        <p class="subtitle">THE TRUTH OF PIUU</p>
-        <p class="intro">You entered a cursed realm seeking its Demon Sovereign. Follow the Last Road. Find Piuu.</p>
-        <div class="menu-actions"><button id="new-game" class="primary">Begin the journey</button><button id="continue-game">Continue</button></div>
-        <p class="hint">Keyboard: WASD move · Space attack · E interact · Shift dodge · J journal</p>
-      </section>
-      <section id="hud" class="hidden" aria-live="polite">
-        <div class="topbar"><div><span id="realm-name">THE LAST ROAD</span><small id="objective">FIND PIUU</small></div><button id="journal-button" aria-label="Open journal">Journal <kbd>J</kbd></button></div>
-        <div class="vitals"><span>HEALTH</span><div class="health"><i id="health-fill"></i></div></div>
-        <div id="prompt" class="prompt"></div>
-        <div id="toast" class="toast"></div>
-      </section>
-      <aside id="journal" class="panel hidden" aria-label="Journal"><button class="close" data-close="journal">×</button><p class="eyebrow">FIELD JOURNAL</p><h2 id="journal-title">The Last Road</h2><div id="journal-content"></div></aside>
-      <section id="dialogue" class="dialogue hidden"><p id="dialogue-label">CHRONICLE</p><p id="dialogue-text"></p><button id="dialogue-next">Continue</button></section>
-      <section id="ending" class="screen hidden"><p class="eyebrow">THE END OF THE CURSE</p><h1>PIUU</h1><p class="subtitle">PRINCESS OF PIULANDIA</p><p id="ending-copy"></p><button id="restart">Return to title</button></section>
-      <div id="touch" class="hidden" aria-label="Touch controls"><div class="stick"><span>MOVE</span></div><div class="touch-actions"><button data-action="attack">ATTACK</button><button data-action="interact">USE</button><button data-action="dodge">DODGE</button></div></div>
-    </main>
-    <script type="module" src="src/main.js"></script>
-  </body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="theme-color" content="#07070b">
+  <meta name="description" content="PIUKISTAN: THE TRUTH OF PIUU — a browser-first 3D dark-fantasy mystery adventure.">
+  <title>PIUKISTAN — The Truth of Piuu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="game-root">
+    <canvas id="game"></canvas>
+    <div id="vignette"></div>
+    <section id="title-screen" class="screen">
+      <p class="eyebrow">A CURSED CHRONICLE</p>
+      <h1>PIU<span>K</span>ISTAN</h1>
+      <p class="subtitle">THE TRUTH OF PIUU</p>
+      <p class="intro">You entered a cursed realm seeking its Demon Sovereign. Follow the Last Road. Find Piuu.</p>
+      <div class="menu-actions"><button id="new-game" class="primary">BEGIN THE JOURNEY</button><button id="continue-game">CONTINUE</button></div>
+      <p class="hint">WASD / arrows move · mouse drag camera · Space attack · E interact · Shift dodge · J journal · Esc pause</p>
+    </section>
+    <section id="hud" class="hidden">
+      <div class="topbar">
+        <div><span id="realm-name">THE LAST ROAD</span><small id="objective">FIND PIUU</small></div>
+        <button id="journal-button">JOURNAL <kbd>J</kbd></button>
+      </div>
+      <div class="quest"><span id="quest-dot"></span><span id="quest-text">Follow the Last Road.</span></div>
+      <div class="health-wrap"><span>HEALTH</span><div class="health"><i id="health-fill"></i></div></div>
+      <div id="prompt" class="prompt"></div><div id="toast" class="toast"></div>
+      <div id="bossbar" class="bossbar hidden"><div><span id="boss-name">CURSED WANDERER</span><b id="boss-hp-label">100%</b></div><div class="boss-track"><i id="boss-hp"></i></div></div>
+    </section>
+    <aside id="journal" class="panel hidden"><button class="close" id="journal-close">×</button><p class="eyebrow">FIELD JOURNAL</p><h2 id="journal-title">The Last Road</h2><div id="journal-content"></div></aside>
+    <section id="dialogue" class="dialogue hidden"><p id="dialogue-label">CHRONICLE</p><p id="dialogue-text"></p><button id="dialogue-next">CONTINUE</button></section>
+    <section id="pause" class="screen hidden"><p class="eyebrow">PIUKISTAN</p><h2>PAUSED</h2><button id="resume">RETURN TO THE ROAD</button></section>
+    <section id="ending" class="screen hidden"><p class="eyebrow">THE END OF THE CURSE</p><h1>PIUU</h1><p class="subtitle">PRINCESS OF PIULANDIA</p><p id="ending-copy"></p><button id="restart">RETURN TO TITLE</button></section>
+    <div id="touch" class="hidden">
+      <div id="stick"><span>MOVE</span><i></i></div>
+      <div class="touch-actions"><button data-action="attack">ATTACK</button><button data-action="interact">USE</button><button data-action="dodge">DODGE</button><button data-action="journal">JOURNAL</button></div>
+    </div>
+    <div id="loading"><div class="loader-ring"></div><span id="loading-text">ENTERING PIUKISTAN…</span></div>
+  </div>
+  <script type="importmap">
+    {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.185.1/examples/jsm/"}}
+  </script>
+  <script type="module" src="src/main.js"></script>
+</body>
 </html>
